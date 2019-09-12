@@ -8,5 +8,3 @@ def mult(a, b):
     return a * b
 
 from math import sqrt
-
- 

@@ -103,6 +103,7 @@ results = opt.minimize(objective, Params, method = 'Nelder-Mead', options = {'ma
 print(results)
 
 ##############################################################
+##############################################################
 # Now the second part
 def payoffs2(data, i, params):
     '''
@@ -123,3 +124,42 @@ def payoffs2(data, i, params):
     f = delta * data['num_stations_buyer'].iloc[i] * data['logk_pop'].iloc[i] + alpha * data['corp_owner_buyer'].iloc[i] * data['logk_pop'].iloc[i] + gamma * data['hhi_target']+ beta * data['d'].iloc[i]
 
     return(f)
+
+# Calculate payoffs
+Params2 = (0.5, 0.6, 1, -1)
+# 2007 actual
+for i in range(len(rad7)):
+    freal72 = [payoffs2(data = rad7, i = i, params = Params2)] # there is a problem here that I cannot figure out. The error message is not helpful.
+
+# 2008 actual
+for i in range(len(rad8)):
+    freal82 = [payoffs2(data = rad8, i = i, params = Params2)]
+
+# Counterfactuals
+for i in range(0, (len(rad7) * (len(rad7) - 1))):
+    fCF72 = [payoffs2(data = rad_CF, i = i, params = Params2)]
+
+for i in range((len(rad7) * (len(rad7) - 1)), len(rad_CF)):
+    fCF82 = [payoffs2(data = rad_CF, i = i, params = Params2)]
+
+def objective(freal72, freal82, fCF72, fCF82):
+    '''
+    A function to calculate the value of the objective function to be maximized
+
+    Args:
+        data:
+
+    Returns:
+        score: the score
+    '''
+    score = 0
+    for i in [[freal72, fCF72], [freal82, fCF82]]:
+        for j in range(len(i[0])):
+            for k in range(len(i[0])):
+                if (i[0][j] - i[1][k, j] >= price - price) & (i[0][k] - i[1][k, (j - 1)] >= ):
+                    score = score - 1
+
+    return(score)
+
+results2 = opt.minimize(objective, Params2, method = 'Nelder-Mead', options = {'maxiter': 5000})
+print(results2)

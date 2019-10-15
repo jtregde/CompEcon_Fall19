@@ -28,7 +28,7 @@ rad = rad.drop(columns = ['price', 'population_target'])
 # Add a column for distances and calculate distances (note: geopy.distance.vincenty is deprecated and would no longer run,
 # so used geopy.distance.geodesic instead)
 from geopy import distance as dist
-rad['d'] = rad.apply(lambda row: dist.geodesic((row.buyer_lat, row.buyer_long), (row.target_lat, row.target_long)), axis = 1)
+rad['d'] = rad.apply(lambda row: (dist.geodesic((row.buyer_lat, row.buyer_long), (row.target_lat, row.target_long)).miles), axis = 1)
 
 # Split data into 2 markets
 rad7 = rad[rad['year'] == 2007]
@@ -44,7 +44,7 @@ rad_CF = [cf[B].iloc[b].values.tolist() + cf[T].iloc[t].values.tolist() for cf i
 rad_CF = pd.DataFrame(rad_CF, columns = B + T)
 
 # Create the distance column
-rad_CF['d'] = rad_CF.apply(lambda row: dist.geodesic((row.buyer_lat, row.buyer_long), (row.target_lat, row.target_long)), axis = 1)
+rad_CF['d'] = rad_CF.apply(lambda row: (dist.geodesic((row.buyer_lat, row.buyer_long), (row.target_lat, row.target_long)).miles), axis = 1)
 
 def payoffs(data, i, params):
     '''
@@ -67,7 +67,7 @@ def payoffs(data, i, params):
 Params = (0.6, -1)
 # 2007 actual
 for i in range(len(rad7)):
-    freal7 = [payoffs(data = rad7, i = i, params = Params)] # there is a problem here that I cannot figure out. The error message is not helpful.
+    freal7 = [payoffs(data = rad7, i = i, params = Params)]
 
 # 2008 actual
 for i in range(len(rad8)):
@@ -80,7 +80,7 @@ for i in range(0, (len(rad7) * (len(rad7) - 1))):
 for i in range((len(rad7) * (len(rad7) - 1)), len(rad_CF)):
     fCF8 = [payoffs(data = rad_CF, i = i, params = Params)]
 
-def objective(freal7, freal8, fCF7, fCF8):
+def objective(freal7, freal8, fCF7, fCF8, Params):
     '''
     A function to calculate the value of the objective function to be maximized
 
@@ -91,15 +91,16 @@ def objective(freal7, freal8, fCF7, fCF8):
         score: the score
     '''
     score = 0
+
     for i in [[freal7, fCF7], [freal8, fCF8]]:
         for j in range(len(i[0])):
             for k in range(len(i[0])):
-                if i[0][j] + i[0][k] >= i[1][k, j] + i[1][k, (j - 1)]:
+                if i[0][j] + i[0][k] >= i[1][k, j] + i[1][k, (j - 1)]: # Can't figure out how to index the lists properly such that I access the elements that I want
                     score = score - 1
 
     return(score)
 
-results = opt.minimize(objective, Params, method = 'Nelder-Mead', options = {'maxiter': 5000})
+results = opt.minimize(objective, Params, args = (freal7, freal8, fCF7, fCF8), method = 'Nelder-Mead', options = {'maxiter': 5000})
 print(results)
 
 ##############################################################
@@ -142,24 +143,24 @@ for i in range(0, (len(rad7) * (len(rad7) - 1))):
 for i in range((len(rad7) * (len(rad7) - 1)), len(rad_CF)):
     fCF82 = [payoffs2(data = rad_CF, i = i, params = Params2)]
 
-def objective(freal72, freal82, fCF72, fCF82):
-    '''
-    A function to calculate the value of the objective function to be maximized
+#def objective(freal72, freal82, fCF72, fCF82):
+#    '''
+#    A function to calculate the value of the objective function to be maximized
+#
+#    Args:
+#        data:
+#
+#    Returns:
+#        score: the score
+#    '''
+#    score = 0
+#    for i in [[freal72, fCF72], [freal82, fCF82]]:
+#        for j in range(len(i[0])):
+#            for k in range(len(i[0])):
+#                if (i[0][j] - i[1][k, j] >= price - price) & (i[0][k] - i[1][k, (j - 1)] >= ):
+#                    score = score - 1
 
-    Args:
-        data:
+#    return(score)
 
-    Returns:
-        score: the score
-    '''
-    score = 0
-    for i in [[freal72, fCF72], [freal82, fCF82]]:
-        for j in range(len(i[0])):
-            for k in range(len(i[0])):
-                if (i[0][j] - i[1][k, j] >= price - price) & (i[0][k] - i[1][k, (j - 1)] >= ):
-                    score = score - 1
-
-    return(score)
-
-results2 = opt.minimize(objective, Params2, method = 'Nelder-Mead', options = {'maxiter': 5000})
-print(results2)
+#results2 = opt.minimize(objective, Params2, method = 'Nelder-Mead', options = {'maxiter': 5000})
+#print(results2)

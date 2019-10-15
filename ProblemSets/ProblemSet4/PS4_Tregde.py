@@ -64,7 +64,7 @@ def payoffs(data, i, params):
 
     return(f)
 # Calculate payoffs
-Params = (0.6, -1)
+Params = (0.5, -0.8)
 # 2007 actual
 for i in range(len(rad7)):
     freal7 = [payoffs(data = rad7, i = i, params = Params)]
@@ -95,13 +95,13 @@ def objective(freal7, freal8, fCF7, fCF8, Params):
     for i in [[freal7, fCF7], [freal8, fCF8]]:
         for j in range(len(i[0])):
             for k in range(len(i[0])):
-                if i[0][j] + i[0][k] >= i[1][k, j] + i[1][k, (j - 1)]: # Can't figure out how to index the lists properly such that I access the elements that I want
+                if i[0][j] + i[0][k] >= i[1][k: j] + i[1][k: (j - 1)]:
                     score = score - 1
 
     return(score)
 
 results = opt.minimize(objective, Params, args = (freal7, freal8, fCF7, fCF8), method = 'Nelder-Mead', options = {'maxiter': 5000})
-print(results)
+print("1st Part Results:", results)
 
 ##############################################################
 ##############################################################
@@ -143,24 +143,24 @@ for i in range(0, (len(rad7) * (len(rad7) - 1))):
 for i in range((len(rad7) * (len(rad7) - 1)), len(rad_CF)):
     fCF82 = [payoffs2(data = rad_CF, i = i, params = Params2)]
 
-#def objective(freal72, freal82, fCF72, fCF82):
-#    '''
-#    A function to calculate the value of the objective function to be maximized
-#
-#    Args:
-#        data:
-#
-#    Returns:
-#        score: the score
-#    '''
-#    score = 0
-#    for i in [[freal72, fCF72], [freal82, fCF82]]:
-#        for j in range(len(i[0])):
-#            for k in range(len(i[0])):
-#                if (i[0][j] - i[1][k, j] >= price - price) & (i[0][k] - i[1][k, (j - 1)] >= ):
-#                    score = score - 1
+def objective2(freal72, freal82, fCF72, fCF82, Params):
+    '''
+    A function to calculate the value of the objective function to be maximized
 
-#    return(score)
+    Args:
+        data:
 
-#results2 = opt.minimize(objective, Params2, method = 'Nelder-Mead', options = {'maxiter': 5000})
-#print(results2)
+    Returns:
+        score: the score
+    '''
+    score = 0
+    for i in [[freal72, fCF72], [freal82, fCF82]]:
+        for j in range(len(i[0])):
+            for k in range(len(i[0])):
+                if (i[0][j] - i[1][k: j] >= rad.logk_price[j] - rad_CF.logk_price[k]) & (i[0][k] - i[1][k: (j - 1)] >= rad.logk_price[k] - rad_CF.logk_price[j]):
+                    score = score - 1
+
+    return(score)
+
+results2 = opt.minimize(objective2, Params2, args = (freal72, freal82, fCF72, fCF82), method = 'Nelder-Mead', options = {'maxiter': 5000})
+print("2nd Part Results:", results2)

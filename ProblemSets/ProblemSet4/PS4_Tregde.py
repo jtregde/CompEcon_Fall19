@@ -123,32 +123,3 @@ def payoffs2(data, i, params):
     f = delta * data['num_stations_buyer'].iloc[i] * data['logk_pop'].iloc[i] + alpha * data['corp_owner_buyer'].iloc[i] * data['logk_pop'].iloc[i] + gamma * data['hhi_target']+ beta * data['d'].iloc[i]
 
     return(f)
-##############################################################
-#numObs2007 = len(rad[(rad['year'] < 2008)])
-#numObs2008 = len(rad[(rad['year'] > 2007)])
-#bigB = numObs2007
-# Fill the dataframe with all of the comparisons
-#for y in range(1, 2):
-#    for b in range(0, bigB - 1):
-#        for t in range(b + 1, bigB):
-
-#            C1 = (rad.iloc[b, 3], rad.iloc[b, 4])
-#            C2 = (rad.iloc[b, 5], rad.iloc[b, 6])
-#            C3 = (rad.iloc[t, 3], rad.iloc[t, 4])
-#            C4 = (rad.iloc[t, 5], rad.iloc[t, 6])
-
-            # Calculate the terms in the payoff function
-#            x1y1 = rad.iloc[b, 11] * rad.iloc[]
-#            dist = vin(C1, C2).miles
-
-######################################################
-############################################################
-# Next steps:
-# -Create new dataframe with all (2,421) of the comparisons
-# -Loop for making the "distance" variable for each comparison (using \
-#       geopy.distance.vincenty)
-# -Create function that computes the payoffs
-# -Define the objective function to be maximized
-# -Optimization routine to find the Maximum Score Estimates of the objective
-# -Repeat for the model with transfers
-############################################################

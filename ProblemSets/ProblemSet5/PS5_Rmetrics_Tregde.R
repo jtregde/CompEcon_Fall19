@@ -7,7 +7,8 @@ library(dse)
 library(rdd)
 library(xtable)
 
-fredr_set_key("4a92891d6d4b0f01c34c0466822da6f5")
+# In case it is like twitter and needs to be kept secret?
+fredr_set_key("...")
 
 # Retrieve data
 params <- list(series_id = c("USREC",  "FEDFUNDS", "GDPPOT", "GDPC1", "GDPDEF", "UNRATE", "NROU"), 

@@ -39,6 +39,11 @@ print(xtable(linreg))
 intRate$tr <- (intRate$infl + 2) + (0.5*(intRate$infl -2 )) + (0.5*intRate$dev)
 # Second linear model with different independent variables
 linreg2 = lm(intRate$FEDFUNDS ~ intRate$tr + intRate$USREC)
+# Get latex code for this table
 print(xtable(linreg2))
 
-
+# Third linear model with time fixed effects
+linreg3 = lm(intRate$FEDFUNDS ~ intRate$tr + intRate$USREC + intRate$date)
+summary(linreg3)
+# Get latex code for the last table
+print(xtable(linreg3))

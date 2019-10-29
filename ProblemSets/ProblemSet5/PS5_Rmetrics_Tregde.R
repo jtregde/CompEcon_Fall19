@@ -10,12 +10,12 @@ library(xtable)
 fredr_set_key("4a92891d6d4b0f01c34c0466822da6f5")
 
 # Retrieve data
-params <- list(series_id = c("USREC",  "FEDFUNDS", "GDPPOT", "GDPC1", "GDPDEF"), 
-               frequency = c("q", "q", "q", "q", "q")
+params <- list(series_id = c("USREC",  "FEDFUNDS", "GDPPOT", "GDPC1", "GDPDEF", "UNRATE", "NROU"), 
+               frequency = c("q", "q", "q", "q", "q", "q", "q")
                )
 intData = purrr::pmap_dfr(
   .l = params,
-  .f = ~ fredr(series_id = .x, frequency = .y, observation_start = as.Date("1960-01-01"))
+  .f = ~ fredr(series_id = .x, frequency = .y, observation_start = as.Date("1949-01-01"))
 )
 
 intDataM <- melt(intData, id = c("series_id", "date"))
@@ -42,8 +42,12 @@ linreg2 = lm(intRate$FEDFUNDS ~ intRate$tr + intRate$USREC)
 # Get latex code for this table
 print(xtable(linreg2))
 
+
+intRate$undev <- 100*(intRate$UNRATE - intRate$NROU)/intRate$NROU
 # Third linear model with time fixed effects
-linreg3 = lm(intRate$FEDFUNDS ~ intRate$tr + intRate$USREC + intRate$date)
+linreg3 = lm(intRate$FEDFUNDS ~ intRate$tr + intRate$USREC + intRate$undev)
 summary(linreg3)
 # Get latex code for the last table
 print(xtable(linreg3))
+
+

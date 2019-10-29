@@ -5,6 +5,7 @@ library(TSA)
 library(reshape2)
 library(dse)
 library(rdd)
+library(xtable)
 
 fredr_set_key("4a92891d6d4b0f01c34c0466822da6f5")
 
@@ -31,9 +32,10 @@ for (i in 2:nrow(intRate)) {
 linreg = lm(intRate$FEDFUNDS ~ intRate$dev + intRate$infl)
 # Summary output of regression
 summary(linreg)
+print(xtable(linreg))
+
 # intRate['tr'] = (intRate['infl'] + 2) + (0.5*(intRate['infl'] - 2)) + (0.5*intRate['dev'])
 intRate$tr <- (intRate$infl + 2) + (0.5*(intRate$infl -2 )) + (0.5*intRate$dev)
 
-intRate$daysSince93 <- intRate$date - as.Date("1993-01-01 ")
-RDestimate(intRate$FEDFUNDS ~ intRate$daysSince93)
-
+linreg2 = lm(intRate$FEDFUNDS ~ intRate$tr + intRate$USREC)
+print(xtable(linreg2))

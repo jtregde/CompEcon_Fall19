@@ -32,10 +32,13 @@ for (i in 2:nrow(intRate)) {
 linreg = lm(intRate$FEDFUNDS ~ intRate$dev + intRate$infl)
 # Summary output of regression
 summary(linreg)
+# Get latex code for the table output
 print(xtable(linreg))
 
 # intRate['tr'] = (intRate['infl'] + 2) + (0.5*(intRate['infl'] - 2)) + (0.5*intRate['dev'])
 intRate$tr <- (intRate$infl + 2) + (0.5*(intRate$infl -2 )) + (0.5*intRate$dev)
-
+# Second linear model with different independent variables
 linreg2 = lm(intRate$FEDFUNDS ~ intRate$tr + intRate$USREC)
 print(xtable(linreg2))
+
+

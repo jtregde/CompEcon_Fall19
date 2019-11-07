@@ -78,11 +78,11 @@ consCred = consCredDF_t.plot(y = 'Total Outstanding',
                              title = "Level of Total Outstanding Consumer Credit",
                              grid = True, lw = 1, color = 'blue')
 # Label the y-axis
-#consCred.set_ylabel('Billions of Dollars')
+consCred.set_ylabel('Billions of Dollars')
 # Provide name of the series for the legend
-#consCred.legend(['Total Outstanding Consumer Credit'])
-#plt.savefig('consCred_graph')
-#plt.show()
+consCred.legend(['Total Outstanding Consumer Credit'])
+plt.savefig('consCred_graph')
+plt.show()
 
 dconsCred = consCredDF_t.plot(y = 'Total percent change',
                               title = "Percent Change in Consumer Credit",

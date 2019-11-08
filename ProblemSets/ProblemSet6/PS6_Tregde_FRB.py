@@ -1,6 +1,9 @@
-################################################
-# FRB data
-################################################
+'''
+---------------------------
+FRB data
+---------------------------
+'''
+
 import pandas as pd
 import numpy as np
 import requests
@@ -8,20 +11,25 @@ import json
 from bs4 import BeautifulSoup
 import urllib.request
 import matplotlib.pyplot as plt
-#%matplotlib inline
 
+# Define url and header so request can be fulfilled
 frburl = "https://www.federalreserve.gov/releases/g19/current/default.htm"
 header = {'User-Agent': 'Mozilla/5.0'}
 
+# Grab source code from website and put in a soup object
 request = urllib.request.Request(frburl, headers=header)
 page = urllib.request.urlopen(request)
 soup = BeautifulSoup(page, 'lxml')
 #print(soup.prettify())
 
+# Find the first table on the page
 table = soup.find("table", {"class": "statistics ng-scope sticky-table"})
 
+# Create dictionary to store the values in
 consumerCredit = {'2014': [], '2015': [], '2016': [], '2017': [], '2018': [], '2018 Q2': [], '2018 Q3': [],
                   '2018 Q4': [], '2019 Q1': [], '2019 Q2': [], '2019 Jun': [], '2019 Jul': [], '2019 Aug': []}
+
+# For loop for storing observations in the dictionary
 for row in table.findAll("tr"):
     cells = row.findAll("td")
     if len(cells) == 13:
@@ -38,6 +46,8 @@ for row in table.findAll("tr"):
         consumerCredit['2019 Jun'].append(cells[10].find(text=True))
         consumerCredit['2019 Jul'].append(cells[11].find(text=True))
         consumerCredit['2019 Aug'].append(cells[12].find(text=True))
+
+
 
 # Put data into pandas dataframe
 consumerCreditDf = pd.DataFrame(consumerCredit)
@@ -60,7 +70,7 @@ for i,v in enumerate(list):
     consumerCreditDf[v] = consumerCreditDf[v].str.replace(',', '')
 
 
-
+# Replace missings as numpy missings so all data is type 'float'
 consumerCreditDf = consumerCreditDf.replace('n.a.', np.NaN)
 consumerCreditDf = consumerCreditDf.replace('n.a. ', np.NaN)
 consumerCreditDf = consumerCreditDf.replace(' n.a.', np.NaN)

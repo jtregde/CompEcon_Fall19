@@ -16,7 +16,7 @@ def utility(m, m_prime, P, sigma):
     '''
     Utility function
     '''
-    c = (m - m_prime) / P
+    c = (m / P) - (m_prime / P)
     if sigma == 1:
         U = np.log(c)
     else:
@@ -27,7 +27,7 @@ def utility(m, m_prime, P, sigma):
 
 
 # Define the endogenous grid operator
-#@numba.jit()
+# @numba.jit()
 def bellman_operator(V, m_grid, P_grid, params):
     beta, sigma = params
 

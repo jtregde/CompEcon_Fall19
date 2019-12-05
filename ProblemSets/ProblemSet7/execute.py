@@ -30,17 +30,18 @@ pi, P_grid = ar1.rouwen(rho, alpha, step, N)
 
 VFtol = 1e-5 # tolerance for distance between V's
 VFdist = 7.0 # initial distance for V
-VFmaxiter = 1000 # maximum iterations allowed
+VFmaxiter = 2000 # maximum iterations allowed
 V = np.zeros(size_m)
 Vstore = np.zeros((size_m, VFmaxiter)) # initialize array for storing V's
 VFiter = 1 # initialize iterations
 V_params = (beta, sigma)
 
-while VFdist > VFtol and VFiter < VFmaxiter:
+
+while (VFdist > VFtol) and (VFiter < VFmaxiter):
     Vstore[:, VFiter] = V
     TV, optM = functions.bellman_operator(V, m_grid, P_grid, V_params)
     VFdist = (np.absolute(V - TV)).max()
-    # print('Iteration: ', VFiter, ', distance: ', VFdist)
+    print('Iteration: ', VFiter, ', distance: ', VFdist)
     V = TV
     VFiter += 1
 
@@ -52,7 +53,7 @@ else:
 
 VF = V
 
-optC = (m_grid - optM) / P_grid
+optC = (m_grid - optM) / P
 
 plt.figure()
 plt.plot(m_grid[1:], VF[1:])

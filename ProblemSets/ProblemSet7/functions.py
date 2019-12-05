@@ -16,7 +16,7 @@ def utility(m, m_prime, P, sigma):
     '''
     Utility function
     '''
-    c = (m / P) - (m_prime / P)
+    c = (m - m_prime) / P
     if sigma == 1:
         U = np.log(c)
     else:
@@ -25,13 +25,13 @@ def utility(m, m_prime, P, sigma):
     return U
 
 
-
 # Define the endogenous grid operator
 # @numba.jit()
 def bellman_operator(V, m_grid, P_grid, params):
     beta, sigma = params
 
-    Val_func = interpolate.interp1d(m_grid, V, kind='cubic', fill_value='extrapolate')
+    Val_func = interpolate.interp1d(m_grid, V, kind='cubic',
+                                    fill_value='extrapolate')
 
     # Initialize array for operator and policy function
     TV = np.empty_like(V)
@@ -44,6 +44,5 @@ def bellman_operator(V, m_grid, P_grid, params):
             m_prime_star = fminbound(objective, 1e-6, m - 1e-6)
             optM[j] = m_prime_star
             TV[j] = - objective(m_prime_star)
-
 
     return TV, optM

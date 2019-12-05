@@ -28,12 +28,12 @@ step = (num_sigma * sigma_P) / (N / 2)
 pi, P_grid = ar1.rouwen(rho, alpha, step, N)
 # P_discrete = sim_markov(P_grid, pi, num_draws)
 
-VFtol = 1e-5 # tolerance for distance between V's
-VFdist = 7.0 # initial distance for V
-VFmaxiter = 2000 # maximum iterations allowed
+VFtol = 1e-5  # tolerance for distance between V's
+VFdist = 7.0  # initial distance for V
+VFmaxiter = 2000  # maximum iterations allowed
 V = np.zeros(size_m)
-Vstore = np.zeros((size_m, VFmaxiter)) # initialize array for storing V's
-VFiter = 1 # initialize iterations
+Vstore = np.zeros((size_m, VFmaxiter))  # initialize array for storing V's
+VFiter = 1  # initialize iterations
 V_params = (beta, sigma)
 
 
@@ -53,7 +53,7 @@ else:
 
 VF = V
 
-optC = (m_grid - optM) / P
+optC = (m_grid - optM) / p
 
 plt.figure()
 plt.plot(m_grid[1:], VF[1:])

@@ -1,5 +1,6 @@
 # import packages
 import numpy as np
+import matplotlib.pyplot as plt
 import ar1_approx as ar1
 import functions
 
@@ -52,3 +53,6 @@ else:
 VF = V
 
 optC = (m_grid - optM) / P_grid
+
+plt.figure()
+plt.plot(m_grid[1:], VF[1:])

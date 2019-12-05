@@ -36,7 +36,7 @@ def bellman_operator(V, m_grid, P_grid, params):
     # Initialize array for operator and policy function
     TV = np.empty_like(V)
     optM = np.empty_like(TV)
-
+    # loops for populating grids with max Value and optimal Ms
     for i, p in enumerate(P_grid):
         for j, m in enumerate(m_grid):
             def objective(m_prime):

@@ -4,10 +4,8 @@ Define functions to be used for solving my Dynamic Programming Problem
 
 # Import packages
 import numpy as np
-import pandas as pd
 from scipy import interpolate
 from scipy.optimize import fminbound
-import scipy.optimize as opt
 import numba
 
 

@@ -6,7 +6,7 @@ import functions
 
 # Set parameters
 beta = 0.95
-sigma = 1.5
+sigma = 1.0
 alpha = 1
 rho = 0.75
 sigma_eps = 0.2
